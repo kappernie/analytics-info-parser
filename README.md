@@ -1,0 +1,2 @@
+# analytics-info-parser
+) Implementation of  a text cleaning module which validates, parses and cleans the following as inputs: a) People names (e.g. Jeffery O’brien) b) Email addresses (e.g. devops@corvidai.com) c) Phone number (e.g. +61 4123 567 891) d) HTTP URLs (e.g. https://www.linkedin.com/company/corvid/) e) Addresses (e.g. 123 Accra Road, Dansoman City, Australia)  The main goal is to validate, clean and standardize the data, handle different scenarios, remove noise, so that it can be used further for other purposes like analytics.
