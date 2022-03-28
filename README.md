@@ -9,11 +9,14 @@ e) Addresses (e.g. 123 Accra Road, Dansoman City, Australia) \
 
 <li>The main goal is to validate, clean and standardize the data, handle different scenarios, remove noise, so that it can be used further for other purposes like analytics.\</li>
 
+<li> TODO <li/>
+wrap with cmdline argument parser 
+
 <li> SETUP <li/>
 
 a) Make sure you have java install and get your java path from your os \
 b) open terminal and create a virtual env \
-c) activate and run  pip install requirements.txt in venv .  \
+c) activate and run  pip install -r requirements.txt in venv .  \
 d) update java path in script \
 e) run app with cmd : python cleantext.py \ 
 
