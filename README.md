@@ -20,37 +20,6 @@ c) activate and run  pip install -r requirements.txt in venv .  \
 d) update java path in script \
 e) run app with cmd : python cleantext.py \ 
 
-
-
-<li> INPUT   <li/>
- you can find the usage and input examples in script
-<li> OUTPUT in terminal <li/>
-
-
-########EXAMPLE USAGE   ###########  \
-######################[email]######################### \
-('aa@aa.com', True)\
-('kwaku@tmail.com', False)\
-['kwaku@tmail.com', 'aa@aa.com']\
-['aa@aa.com']\
-######################[number]#########################\
-(True, True)\
-(233, 501591897, None)\
-Gh: ['+233244077208', '+233501591897'] ,US: ['+15107488230', '+17034800500']\
-Gh: ['+233244077208', '+233501591897'] ,US: ['+15107488230', '+17034800500']\
-########################[name]#######################\
-('Dr. Juan Q. Xavier de la Vega III (Doc Vega)', True)\
-('Dr.', 'Juan', 'Q. Xavier', 'de la Vega', 'III', 'Doc Vega')\
-False\
-['invalid name input']\
-['Ernest', 'John', 'Jane', 'Zii']\
-['Ernest', 'John', 'Jane', 'Zii']\
-#######################[url]########################\
-['www.givers.com', 'https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string', 'www.google.com', 'facebook.com', 'http://test.com/method?param=wasd', 'http://test.com/method?param=wasd&params2=kjhdkjshd'] \
-#######################[locations]######################## \
-['china', 'canada', 'Ghana']\
-###############################################\
-
 <li>Block of Text<li/>
 <p>"""My name is Ernest Appau , I am an Engineer at Corvid.ai . You can contact me on 
     02344077208 and +233501591897 or 703-4800500 . I live in Ghana and want to travel 
