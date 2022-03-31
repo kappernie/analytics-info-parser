@@ -33,4 +33,10 @@ The code below catches all urls in text and returns urls in list . The address o
 
 <li>Results for Block of Text<li/>
 
-<p>{'names': ['Ernest', 'Appau'], 'numbers': [{'GH': ['+233501591897']}, {'US': ['+233501591897', '+17034800500']}], 'emails': ['Hr@corvid.ai', 'kappernie@corvid.ai'], 'urls': ['Corvid.ai', 'Corvid.ai', 'www.corvid.com', 'corvid.ai', 'corvid.ai', 'www.givers.com', 'https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string', 'www.google.com', 'facebook.com', 'http://test.com/method?param=wasd', 'http://test.com/method?param=wasd&params2=kjhdkjshd'], 'locations': ['Ghana', 'US', 'UK', 'China', 'France', 'Australia', 'Accra', 'Road', 'Dansoman', 'City']}<p/>
+<p>{'names': ['Ernest', 'Appau'], \
+ 'numbers': [{'GH': ['+233501591897']}, \
+  {'US': ['+233501591897', '+17034800500']}], \
+   'emails': ['Hr@corvid.ai', 'kappernie@corvid.ai'], \
+   'urls': ['Corvid.ai', 'Corvid.ai', 'www.corvid.com', 'corvid.ai', 'corvid.ai', 'www.givers.com', 'https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string', 'www.google.com', 'facebook.com', 'http://test.com/method?param=wasd', 'http://test.com/method?param=wasd&params2=kjhdkjshd'], \
+   'locations': ['Ghana', 'US', 'UK', 'China', 'France', 'Australia', 'Accra', 'Road', 'Dansoman', 'City']}
+   <p/>
