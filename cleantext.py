@@ -22,8 +22,9 @@ os.environ['JAVAHOME'] = java_path
 class Data():
     # named the class data since I dont know what you want to analyze logs etc 
     def __init__(self,name = None , email = None ,\
-         address = None , phoneNo = None , url = None , Geocode = None ):
+         address = None , phoneNo = None , url = None , Geocode = None ,text = None  ):
         # handle default lib stuff init here 
+        self.text = text
         self.name = name
         self.email = email
         self.address = address
@@ -239,6 +240,20 @@ class Data():
                             locations.append(list(tag)[0])
             return locations
         return ['invalid text input']
+
+    def analyze_text(self,text = None , geocode = None):
+        if text and  isinstance(text,str):
+            self.text=text
+        if geocode and  isinstance(text,list):
+            self.Geocode = geocode
+        if self.text:
+            get_names       = self.parse_names_in_noise(self.text)
+            get_numbers     = [{i : self.parse_phonenumber_in_noise(self.text, i)} for i in self.Geocode ]
+            get_emails     = self.parse_email_in_noise(self.text)
+            get_urls        = self.parse_url_in_noise(self.text)
+            get_locations   = self.parse_address_in_noise(self.text)
+            return get_names,get_numbers,get_emails,get_urls,get_locations
+        return '[Invalid text input]'
         
  
    
@@ -328,4 +343,20 @@ text = "china,canada and Ghana are some countries in the world."
 addresses  = Data().parse_address_in_noise(text)
 print(addresses)
 
-print("###############################################")
+print("#####################[Block of text]#########################")
+text1 = """My name is Ernest Appau , I am an Engineer at Corvid.ai . You can contact me on 
+    02344077208 and +233501591897 or 703-4800500 . I live in Ghana and want to travel 
+        one day to the US ,UK ,China,France and Australia. Corvid.ai is an Artificial Intelligence 
+            consulting company .The website address is www.corvid.com .You can reach out to the administrator 
+                of the site by Hr@corvid.ai or mine (kappernie@corvid.ai). Please note the website is not any of these 
+                    go to https//:www.givers.com to donateThe link of this question: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
+Also there are some urls: www.google.com, facebook.com, http://test.com/method?param=wasd, http://test.com/method?param=wasd&params2=kjhdkjshd
+The code below catches all urls in text and returns urls in list . The address of the company is 123 Accra Road, Dansoman City, Australia  """
+
+
+try:
+    a,b,c,d,e = Data(text = text1).analyze_text()
+    print({'names':a,'numbers':b,'emails':c,'urls':d,'locations':e})
+    if 
+except:
+    pass
