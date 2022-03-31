@@ -357,6 +357,5 @@ The code below catches all urls in text and returns urls in list . The address o
 try:
     a,b,c,d,e = Data(text = text1).analyze_text()
     print({'names':a,'numbers':b,'emails':c,'urls':d,'locations':e})
-    if 
 except:
     pass
