@@ -303,17 +303,12 @@ class FormFieldAnylizer:
             return False
         return False 
 
-    @staticmethod
-    def validate_name(name):
-        """ # validate the name by checking if the contain any foreign 
-        # characters """
-        pass
-        return {'name':name,"status":False}
 
     def standardize_name(name):
-        """ # put it name in a standard format """
+        """ To-do
+        # put the name in a standard format """
         pass
-        return {'name':name,"status":False}
+        return {'firstname':name,"lastname":False}
 
     # Address methods 
     @staticmethod
@@ -323,21 +318,53 @@ class FormFieldAnylizer:
         state
         surburb 
         post code
-        # Address format :35 Burdett St. Albion 4010 Queensland
-        """
-        pass
-        return {'street_Address':name,"state":name,"surburb":name ,"post_code":name}
+        # Address format 2 :35 Burdett St. Albion 4010 Queensland
+        # address format 1 :71 Gatling Road, Cannon Hill, Qld 4170
 
-    def clean_address_format_two(address):
-        """find address blocks section 
-        street Adress
-        state
-        surburb 
-        post code
-        # Address format :71 Gatling Road, Cannon Hill, Qld 4170
+        common ending names for streets in australia 
+        rememeber to convert to lower format
+        [st.,street,road,alley,lane,way,parade,concourse,place,drive,walk,arcade,court,
+        avenue,boulevard,Rd.Cres.,terrace,Dr.,Blvd,Ave,Pl.,Terr.,Crt]
         """
-        pass
-        return {'street_Address':name,"state":name,"surburb":name ,"post_code":name}
+
+        final = {}
+        if address and isinstance(address, str):
+            # get state and post code for address type 1 and 2
+            street_markers = [ "st.","street","road","alley","lane","way","parade","concourse","place","drive","walk","arcade","court",
+            "avenue","boulevard","rd.","cres.","terrace","dr.","Blvd","ave","pl.","terr.","crt."]
+            street_adress = []
+            suburb = []
+            address1 = address
+            address = address.split(' ')
+            for x in range(len(address)):
+                if len(address[x - 1]) == 4:
+                    if  (i.isdigit() for i in address[x - 1].split()):
+                        post_cde_idx = x-1
+                        final['post_code'] = int(address[post_cde_idx])
+                        if  post_cde_idx == -1 :
+                            final['state'] = address[post_cde_idx - 1]
+                        else:
+                            final['state'] = address[post_cde_idx + 1]
+            try:  
+                for i in range(len(address)) :
+                    if address[i].lower() in street_markers:
+                        final['street'] = ' '.join(address[:i + 1])
+                        final['suburb'] = ' '.join(address[i + 1:post_cde_idx])
+                        
+            except:
+                pass
+
+            # get street and suburb for address type1 
+            try:
+                if address1.split(',')[0] and address1.split(',')[1]:
+                    final['street'] = address1.split(',')[0]
+                    final['suburb'] = address1.split(',')[1]
+            except:
+                pass
+
+                # get street and suburb for address type 2 from street markers and posts cde indx
+        return final
+      
 
     @staticmethod
     def standardize_Address(name):
@@ -466,4 +493,9 @@ Postcode: 4170
 """
 
 
-print(FormFieldAnylizer.clean_name('1 Ansah'))
+# form analyzer 
+
+print(FormFieldAnylizer.clean_name('Jef345f3ery Ansah')) #Todo check for extra puncs not b/n alphabets
+#Try different formats of addresses 
+print(FormFieldAnylizer.clean_address_format_one('71 Gatling Road, Cannon Hill, Qld 4170'))
+print(FormFieldAnylizer.clean_address_format_one('35 Burdett St. Albion 4010 Queensland'))
