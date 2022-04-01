@@ -6,6 +6,7 @@ from nameparser import HumanName
 import nltk
 import nltk.tag as st
 import os
+import itertools
 
 # make sure you install java first
 # set your java path for nltk dependency
@@ -272,16 +273,35 @@ class TextAnalyzer():
 # url  - almost
 # email-address - MultiNested  - almost -check postal package  
 
-
 class FormFieldAnylizer:
     """ anayliyze inputs coming from a form field"""
 
     # name methods 
     @staticmethod
     def clean_name(name):
-        """# statndardize and remove extra chars from name for input """
-        pass
-        return {'name':name,"cleaned":name}
+        """# statndardize and remove extra chars from name for input
+        eg : Jeffery Ansah """
+        if name and isinstance(name , str):
+            name = name.strip() #remove begining and trailing spaces
+            name.split(" ")#split name into list
+            # move validation code to validate name
+            # refactor and use list conprehensions to improve speed
+            valid_chars = []
+            invalid_chars = []
+            if len(name) > 0:
+                for i in name:
+                    if any(i.isdigit() for char in i):
+                        invalid_chars.append(i)
+                    else:
+                        valid_chars.append(i)
+                cleaned_name = [list(v) for k,v in itertools.groupby(valid_chars,key=str.isspace) if not k]
+                cleaned_name = [''.join(i) for i in cleaned_name]
+
+                return {'name':name,"cleaned":{\
+                    'invalid_characters': invalid_chars,
+                    'cleaned_name': cleaned_name}}
+            return False
+        return False 
 
     @staticmethod
     def validate_name(name):
@@ -377,14 +397,14 @@ text = 'Ernest , John and Jane are not African names.Ernest ,\
 # singlenamesValidation10 =Data().parse_name(name1)
 # singlenamesValidation2 =Data().validate_name(name2)
 # singlenamesValidation20 =Data().parse_name(name2)
-names = Data().parse_names_in_noise('I am Bird wood.')
+# names = Data().parse_names_in_noise('I am Bird wood.')
 # vnames = Data().clean_names(names)
 
 # print(singlenamesValidation1) #valid name
 # print(singlenamesValidation10) #valid name
 # print(singlenamesValidation2) #invalid name
 # print(singlenamesValidation20) #valid name
-print(names) # parse name from text
+# print(names) # parse name from text
 # print(vnames) # clean parsed name from text
 
 
@@ -445,3 +465,5 @@ State: Qld
 Postcode: 4170
 """
 
+
+print(FormFieldAnylizer.clean_name('1 Ansah'))
