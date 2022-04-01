@@ -19,7 +19,7 @@ os.environ['JAVAHOME'] = java_path
 #before installing the py module 
 
  
-class Data():
+class TextAnalyzer():
     # named the class data since I dont know what you want to analyze logs etc 
     def __init__(self,name = None , email = None ,\
          address = None , phoneNo = None , url = None , Geocode = None ,text = None  ):
@@ -31,7 +31,7 @@ class Data():
         self.phoneNo = phoneNo
         self.url = url
         self.logger = 'syslog' #set logger to log errors :Todo
-        self.Geocode = ['GH','US']  
+        self.Geocode = ['GH','US']  if Geocode is None  else Geocode
         #get more info about \ 2 digit country codes on this url {https://countrycode.org/}
         self.english_file = './stanford-ner/english.all.3class.distsim.crf.ser.gz'
         self.ner_file = './stanford-ner/stanford-ner.jar'
@@ -68,6 +68,11 @@ class Data():
                 name = HumanName(name)
                 return name.title,name.first,name.middle,name.last\
                 ,name.suffix ,name.nickname
+                # split each text and get tokens and check if its Alpha numeric
+                # check if it is an actual human name 
+                # skip and keep some punctuations
+                # check for numbers 
+                # eg : J3ffery
             except Exception as e :
                 return ["invalid name input"]
         return ["invalid name input"]
@@ -257,7 +262,8 @@ class Data():
         
  
    
-    
+
+# Class form validator -clean , standadize and validate entities from a form Fields.
 
 # ToDo
 # email - done
@@ -267,81 +273,136 @@ class Data():
 # email-address - MultiNested  - almost -check postal package  
 
 
+class FormFieldAnylizer:
+    """ anayliyze inputs coming from a form field"""
 
-print('########EXAMPLE USAGE   ###########')
+    # name methods 
+    @staticmethod
+    def clean_name(name):
+        """# statndardize and remove extra chars from name for input """
+        pass
+        return {'name':name,"cleaned":name}
 
-print("######################[email]#########################")
-# usage: email
-mail1 = "aa@aa.com"
-mail2 = "kwaku@tmail.com"
-text = 'my link is kwaku@tmail.com and aa@aa.com'
-singleMailsValidation1 =Data().validate_email(mail1)
-singleMailsValidation2 =Data().validate_email(mail2)
-emails = Data().parse_email_in_noise(text)
-vmails = Data().clean_email(emails)
+    @staticmethod
+    def validate_name(name):
+        """ # validate the name by checking if the contain any foreign 
+        # characters """
+        pass
+        return {'name':name,"status":False}
 
-print(singleMailsValidation1) #valid mail
-print(singleMailsValidation2) #invalid mail
-print(emails) # parse mail from text
-print(vmails) # clean parsed mail from text
+    def standardize_name(name):
+        """ # put it name in a standard format """
+        pass
+        return {'name':name,"status":False}
+
+    # Address methods 
+    @staticmethod
+    def clean_address_format_one(address):
+        """find address blocks section 
+        street Adress
+        state
+        surburb 
+        post code
+        # Address format :35 Burdett St. Albion 4010 Queensland
+        """
+        pass
+        return {'street_Address':name,"state":name,"surburb":name ,"post_code":name}
+
+    def clean_address_format_two(address):
+        """find address blocks section 
+        street Adress
+        state
+        surburb 
+        post code
+        # Address format :71 Gatling Road, Cannon Hill, Qld 4170
+        """
+        pass
+        return {'street_Address':name,"state":name,"surburb":name ,"post_code":name}
+
+    @staticmethod
+    def standardize_Address(name):
+        """Put address in  standard format """
+        pass
 
 
-print("######################[number]#########################")
 
-# usage: phonenumber
-number1 = "+442083661177"
-number2 = "+233501591897"
-text = "Call me at 510-748-8230 if it's before 9:30, or on 703-4800500  or 0244077208 or 233501591897 or after 10am."
-singlenumValidation1 =Data().validate_phonenumber(number1)
-singlenumValidation2 =Data().parse_phonenumber(number2)
-numbers_gh = Data().parse_phonenumber_in_noise(text , "GH")
-numbers_us = Data().parse_phonenumber_in_noise(text , "US")
-vnumbers_gh = Data().clean_phonenumber(numbers_gh)
-vnumbers_us = Data().clean_phonenumber(numbers_us)
 
-print(singlenumValidation1) #valid number
-print(singlenumValidation2) #invalid number 
-print('Gh:',numbers_gh , ",US:" , numbers_us ) # parse numbers from text with specific geocode
-print('Gh:',vnumbers_gh , ",US:" , vnumbers_us ) # clean parsed numbers from text
+
+
+# print('########EXAMPLE USAGE   ###########')
+
+# print("######################[email]#########################")
+# # usage: email
+# mail1 = "aa@aa.com"
+# mail2 = "kwaku@tmail.com"
+# text = 'my link is kwaku@tmail.com and aa@aa.com'
+# singleMailsValidation1 =Data().validate_email(mail1)
+# singleMailsValidation2 =Data().validate_email(mail2)
+# emails = Data().parse_email_in_noise(text)
+# vmails = Data().clean_email(emails)
+
+# print(singleMailsValidation1) #valid mail
+# print(singleMailsValidation2) #invalid mail
+# print(emails) # parse mail from text
+# print(vmails) # clean parsed mail from text
+
+
+# print("######################[number]#########################")
+
+# # usage: phonenumber
+# number1 = "+442083661177"
+# number2 = "+233501591897"
+# text = "Call me at 510-748-8230 if it's before 9:30, or on 703-4800500  or 0244077208 or 233501591897 or after 10am."
+# singlenumValidation1 =Data().validate_phonenumber(number1)
+# singlenumValidation2 =Data().parse_phonenumber(number2)
+# numbers_gh = Data().parse_phonenumber_in_noise(text , "GH")
+# numbers_us = Data().parse_phonenumber_in_noise(text , "US")
+# vnumbers_gh = Data().clean_phonenumber(numbers_gh)
+# vnumbers_us = Data().clean_phonenumber(numbers_us)
+
+# print(singlenumValidation1) #valid number
+# print(singlenumValidation2) #invalid number 
+# print('Gh:',numbers_gh , ",US:" , numbers_us ) # parse numbers from text with specific geocode
+# print('Gh:',vnumbers_gh , ",US:" , vnumbers_us ) # clean parsed numbers from text
 
 print("########################[name]#######################")
 # usage: name
 # notice its not bullet proof for african names lol -African lives matter 
 # to missing some names you are expecting per Geolocation  add a list per geo
-name1 = "Dr. Juan Q. Xavier de la Vega III (Doc Vega)"
+name1 = "4444 A. Ans44 "
 name2 = 1
 text = 'Ernest , John and Jane are not African names.Ernest ,\
     Ama and kofi are bed fellows ,Zii jing ping is the president of China 5678 and Canada'
-singlenamesValidation1 =Data().validate_name(name1)
-singlenamesValidation10 =Data().parse_name(name1)
-singlenamesValidation2 =Data().validate_name(name2)
-singlenamesValidation20 =Data().parse_name(name2)
-names = Data().parse_names_in_noise(text)
-vnames = Data().clean_names(names)
+# singlenamesValidation1 =Data().validate_name(name1)
+# singlenamesValidation10 =Data().parse_name(name1)
+# singlenamesValidation2 =Data().validate_name(name2)
+# singlenamesValidation20 =Data().parse_name(name2)
+names = Data().parse_names_in_noise('I am Bird wood.')
+# vnames = Data().clean_names(names)
 
-print(singlenamesValidation1) #valid name
-print(singlenamesValidation10) #valid name
-print(singlenamesValidation2) #invalid name
-print(singlenamesValidation20) #valid name
+# print(singlenamesValidation1) #valid name
+# print(singlenamesValidation10) #valid name
+# print(singlenamesValidation2) #invalid name
+# print(singlenamesValidation20) #valid name
 print(names) # parse name from text
-print(vnames) # clean parsed name from text
+# print(vnames) # clean parsed name from text
 
 
-print("#######################[url]########################")
+# print("#######################[url]########################")
 
-# usage: url
-text = """go to https//:www.givers.com to donateThe link of this question: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
-Also there are some urls: www.google.com, facebook.com, http://test.com/method?param=wasd, http://test.com/method?param=wasd&params2=kjhdkjshd
-The code below catches all urls in text and returns urls in list. """
-urls = Data().parse_url_in_noise(text)
-print(urls)
+# # usage: url
+# text = """go to https//:www.givers.com to donateThe link of this question: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
+# Also there are some urls: www.google.com, facebook.com, http://test.com/method?param=wasd, http://test.com/method?param=wasd&params2=kjhdkjshd
+# The code below catches all urls in text and returns urls in list. """
+# urls = Data().parse_url_in_noise(text)
+# print(urls)
 
-print("#######################[locations]########################")
+# print("#######################[locations]########################")
 
-# usage: physical addresses
-text = "china,canada and Ghana are some countries in the world."
-addresses  = Data().parse_address_in_noise(text)
-print(addresses)
+# # usage: physical addresses
+# text = "china,canada and Ghana are some countries in the world."
+# addresses  = Data().parse_address_in_noise(text)
+# print(addresses)
 
 print("#####################[Block of text]#########################")
 text1 = """My name is Ernest Appau , I am an Engineer at Corvid.ai . You can contact me on 
@@ -354,8 +415,33 @@ Also there are some urls: www.google.com, facebook.com, http://test.com/method?p
 The code below catches all urls in text and returns urls in list . The address of the company is 123 Accra Road, Dansoman City, Australia  """
 
 
-try:
-    a,b,c,d,e = Data(text = text1).analyze_text()
-    print({'names':a,'numbers':b,'emails':c,'urls':d,'locations':e})
-except:
-    pass
+# try:
+#     a,b,c,d,e = Data(text = text1).analyze_text()
+#     print({'names':a,'numbers':b,'emails':c,'urls':d,'locations':e})
+# except:
+#     pass
+
+"""
+35 Burdett St. Albion 4010 Queensland
+35 Burdett St.
+Albion
+4010
+Queensland
+Jeffery Ansah
+6:50 AM
+35 Burdett St.,Albion 4010 Queensland
+
+"""
+
+
+"""
+71 Gatling Road, Cannon Hill, Qld 4170
+"""
+
+"""
+Street Address: 71 Gatling Road, 
+Surburb: Cannon Hill, 
+State: Qld 
+Postcode: 4170
+"""
+
