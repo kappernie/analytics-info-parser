@@ -339,7 +339,7 @@ class FormFieldAnylizer:
 
         final = {}
         if address and isinstance(address, str):
-            # get state and post code for address type 1 and 2
+            # get state and post code for addressess with post code almost at the end of address
             street_markers = [ "st.","street","road","alley","lane","way","parade","concourse","place","drive","walk","arcade","court",
             "avenue","boulevard","rd.","cres.","terrace","dr.","Blvd","ave","pl.","terr.","crt."]
             street_adress = []
@@ -347,25 +347,27 @@ class FormFieldAnylizer:
             address2 =  address.replace(',',' ').split(' ')
             address2 = list(filter(None, address2))
 
-            for x in range(len(address2)):
-                if len(address2[x - 1]) == 4:
+            for x in range(len(address2)): #iterate over the length of the list 
+                if len(address2[x - 1]) == 4: #check the index fom the end of the list if it has a len of 4 
+                    # if it does 
                     try:
+                        # try converting that element to an int  else breakout of loop and start over 
                         if  int(address2[x - 1]):
-                            pci = x-1
-                            final['post_code'] =int( address2[pci])
-                            if  pci == -1 :
-                                final['state'] = address2[pci - 1]
+                            pci = x-1 #set the post code index 
+                            final['post_code'] =int( address2[pci]) #add the post code to the final dict 
+                            if  pci == -1 : #if post code index is the last elem in the list 
+                                final['state'] = address2[pci - 1] # the elem b4 that is the state 
                             else:
-                                final['state'] = address2[pci + 1]
+                                final['state'] = address2[pci + 1] #else the elem after that is the state
                     except:
                         pass
             try:  
-                for i in range(len(address2)) :
-                    if address2[i].lower() in street_markers:
-                        street_marker_index = i + 1
-                        final['street'] = ' '.join(address2[:street_marker_index ])
+                for i in range(len(address2)) : #iterate over the length of the address list 
+                    if address2[i].lower() in street_markers: # check if iter elem lies in the street marker list
+                        street_marker_index = i + 1 # if it exist , then we have found the index of the end of our street address
+                        final['street'] = ' '.join(address2[:street_marker_index ]) # Add a slice of the street adress to final dict 
                         final['suburb'] = ' '.join(address2[street_marker_index :\
-                             len(address2)- 2 if pci == -1 else  pci])
+                             len(address2)- 2 if pci == -1 else  pci]) #find and add a suburb to the list 
             except:
                 pass
         return final
