@@ -281,6 +281,8 @@ class FormFieldAnylizer:
     def clean_name(name):
         """# statndardize and remove extra chars from name for input
         eg : Jeffery Ansah """
+        final_name = {}
+        final_name['valid_status'] = True
         if name and isinstance(name , str):
             name = name.strip() #remove begining and trailing spaces
             name.split(" ")#split name into list
@@ -296,10 +298,12 @@ class FormFieldAnylizer:
                         valid_chars.append(i)
                 cleaned_name = [list(v) for k,v in itertools.groupby(valid_chars,key=str.isspace) if not k]
                 cleaned_name = [''.join(i) for i in cleaned_name]
-
-                return {'name':name,"cleaned":{\
-                    'invalid_characters': invalid_chars,
-                    'cleaned_name': cleaned_name}}
+                if len(invalid_chars) > 0:
+                    final_name['valid_status'] = False
+                final_name['name'] = name
+                final_name['invalid_characters'] =  invalid_chars
+                final_name['cleaned_name'] = cleaned_name 
+                return final_name
             return False
         return False 
 
@@ -496,12 +500,14 @@ Postcode: 4170
 
 # form analyzer 
 
-print(FormFieldAnylizer.clean_name('Jef345f3ery Ansah')) #Todo check for extra puncs not b/n alphabets
+print(FormFieldAnylizer.clean_name(' Dr. Jeffery Ansah')) #Todo check for extra puncs not b/n alphabets
 #Try different formats of addresses 
-print(FormFieldAnylizer.clean_address('71 Gatling Road, Cannon Hill, Qld 4170'))
-print(FormFieldAnylizer.clean_address('35 Burdett St. Albion 4010 Queensland'))
-print(FormFieldAnylizer.clean_address('35 Burdett St.,Albion,4010 Queensland'))
-print(FormFieldAnylizer.clean_address('35 Burdett main St.,Albion  villa suburb 4010 Queensland'))
+# print(FormFieldAnylizer.clean_address('71 Gatling Road, Cannon Hill, Qld 4170'))
+# print(FormFieldAnylizer.clean_address('35 Burdett St. Albion 4010 Queensland'))
+
+# print(FormFieldAnylizer.clean_address('16/63 Ludwick Street Cannon Hill Qld 4170'))
+# print(FormFieldAnylizer.clean_address('5504 Whitworth Road Cannon Hill Qld'))
+# print(FormFieldAnylizer.clean_address('104/1918 Creek Road Cannon Hill Qld 4170'))
 
 
 
