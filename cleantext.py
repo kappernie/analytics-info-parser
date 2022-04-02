@@ -312,7 +312,7 @@ class FormFieldAnylizer:
 
     # Address methods 
     @staticmethod
-    def clean_address_format_one(address):
+    def clean_address(address):
         """find address blocks section 
         street Adress
         state
@@ -498,10 +498,10 @@ Postcode: 4170
 
 print(FormFieldAnylizer.clean_name('Jef345f3ery Ansah')) #Todo check for extra puncs not b/n alphabets
 #Try different formats of addresses 
-print(FormFieldAnylizer.clean_address_format_one('71 Gatling Road, Cannon Hill, Qld 4170'))
-print(FormFieldAnylizer.clean_address_format_one('35 Burdett St. Albion 4010 Queensland'))
-print(FormFieldAnylizer.clean_address_format_one('35 Burdett St.,Albion,4010 Queensland'))
-print(FormFieldAnylizer.clean_address_format_one('35 Burdett main St.,Albion  villa suburb 4010 Queensland'))
+print(FormFieldAnylizer.clean_address('71 Gatling Road, Cannon Hill, Qld 4170'))
+print(FormFieldAnylizer.clean_address('35 Burdett St. Albion 4010 Queensland'))
+print(FormFieldAnylizer.clean_address('35 Burdett St.,Albion,4010 Queensland'))
+print(FormFieldAnylizer.clean_address('35 Burdett main St.,Albion  villa suburb 4010 Queensland'))
 
 
 
