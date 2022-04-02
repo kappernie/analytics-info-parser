@@ -318,13 +318,19 @@ class FormFieldAnylizer:
         state
         surburb 
         post code
-        # Address format 2 :35 Burdett St. Albion 4010 Queensland
+
         # address format 1 :71 Gatling Road, Cannon Hill, Qld 4170
+        # Address format 2 :35 Burdett St. Albion 4010 Queensland
+        
 
         common ending names for streets in australia 
         rememeber to convert to lower format
         [st.,street,road,alley,lane,way,parade,concourse,place,drive,walk,arcade,court,
         avenue,boulevard,Rd.Cres.,terrace,Dr.,Blvd,Ave,Pl.,Terr.,Crt]
+
+        abbr
+        smi = street marker index
+        pci = post code index 
         """
 
         final = {}
@@ -334,35 +340,30 @@ class FormFieldAnylizer:
             "avenue","boulevard","rd.","cres.","terrace","dr.","Blvd","ave","pl.","terr.","crt."]
             street_adress = []
             suburb = []
-            address1 = address
-            address = address.split(' ')
-            for x in range(len(address)):
-                if len(address[x - 1]) == 4:
-                    if  (i.isdigit() for i in address[x - 1].split()):
-                        post_cde_idx = x-1
-                        final['post_code'] = int(address[post_cde_idx])
-                        if  post_cde_idx == -1 :
-                            final['state'] = address[post_cde_idx - 1]
-                        else:
-                            final['state'] = address[post_cde_idx + 1]
+            address2 =  address.replace(',',' ').split(' ')
+            address2 = list(filter(None, address2))
+
+            for x in range(len(address2)):
+                if len(address2[x - 1]) == 4:
+                    try:
+                        if  int(address2[x - 1]):
+                            pci = x-1
+                            final['post_code'] =int( address2[pci])
+                            if  pci == -1 :
+                                final['state'] = address2[pci - 1]
+                            else:
+                                final['state'] = address2[pci + 1]
+                    except:
+                        pass
             try:  
-                for i in range(len(address)) :
-                    if address[i].lower() in street_markers:
-                        final['street'] = ' '.join(address[:i + 1])
-                        final['suburb'] = ' '.join(address[i + 1:post_cde_idx])
-                        
+                for i in range(len(address2)) :
+                    if address2[i].lower() in street_markers:
+                        street_marker_index = i + 1
+                        final['street'] = ' '.join(address2[:street_marker_index ])
+                        final['suburb'] = ' '.join(address2[street_marker_index :\
+                             len(address2)- 2 if pci == -1 else  pci])
             except:
                 pass
-
-            # get street and suburb for address type1 
-            try:
-                if address1.split(',')[0] and address1.split(',')[1]:
-                    final['street'] = address1.split(',')[0]
-                    final['suburb'] = address1.split(',')[1]
-            except:
-                pass
-
-                # get street and suburb for address type 2 from street markers and posts cde indx
         return final
       
 
@@ -499,3 +500,14 @@ print(FormFieldAnylizer.clean_name('Jef345f3ery Ansah')) #Todo check for extra p
 #Try different formats of addresses 
 print(FormFieldAnylizer.clean_address_format_one('71 Gatling Road, Cannon Hill, Qld 4170'))
 print(FormFieldAnylizer.clean_address_format_one('35 Burdett St. Albion 4010 Queensland'))
+print(FormFieldAnylizer.clean_address_format_one('35 Burdett St.,Albion,4010 Queensland'))
+print(FormFieldAnylizer.clean_address_format_one('35 Burdett main St.,Albion  villa suburb 4010 Queensland'))
+
+
+
+# sample results
+# {'name': 'Jef345f3ery Ansah', 'cleaned': {'invalid_characters': ['3', '4', '5', '3'], 'cleaned_name': ['Jeffery', 'Ansah']}}
+# {'post_code': 4170, 'state': 'Qld', 'street': '71 Gatling Road', 'suburb': 'Cannon Hill'}
+# {'post_code': 4010, 'state': 'Queensland', 'street': '35 Burdett St.', 'suburb': 'Albion'}
+# {'post_code': 4010, 'state': 'Queensland', 'street': '35 Burdett St.', 'suburb': 'Albion'}
+# {'post_code': 4010, 'state': 'Queensland', 'street': '35 Burdett St.', 'suburb': 'Albion villa suburb'}
